@@ -21,6 +21,8 @@ Route::get('/home', 'HomeController@index')->name('home');
 
 Route::get('/test', 'PagesController@test');
 
-Route::get('/repos', 'PagesController@repos');
+Route::get('/repostest', 'PagesController@repos');
 
 Route::resource('posts', 'PostController');
+
+Route::resource('repos', 'ReposConstroller');

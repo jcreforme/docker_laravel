@@ -1,14 +1,6 @@
-<!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
+@extends('layouts.app')
 
-        <title>Test</title>
-
-        
-    </head>
-    <body>
+@section('content')
         <h1>{{$title}}</h1>
         <button id="btnCommits">Commits</button>
         <button id="btnGetInfo">Get Info</button>
@@ -93,5 +85,4 @@
 
         
         </script>
-    </body>
-</html>
+@endsection
