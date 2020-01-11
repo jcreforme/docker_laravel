@@ -15,29 +15,29 @@ class CreateReposTable extends Migration
     {
         Schema::create('repos', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('repo_uuid');
-            $table->string('name');
-            $table->string('full_name');
-            $table->string('description');
-            $table->string('language');
-            $table->string('size');
-            $table->string('stargazers_count');
-            $table->string('watchers_count');
-            $table->string('has_issues');
-            $table->string('has_projects');
-            $table->string('has_downloads');
-            $table->string('has_wiki');
-            $table->string('has_pages');
-            $table->string('forks_count');
-            $table->string('open_issues_count');
-            $table->string('forks');
-            $table->string('open_issues');
-            $table->string('watchers');
-            $table->string('org_uuid');
-            $table->string('owner_uuid');
-            $table->string('started_at');
-            $table->string('last_push_at');
-            $table->timestamps();
+            //$table->string('repo_uuid')->default('')->change();
+            $table->string('name')->default('')->change();
+            $table->string('full_name')->default('')->change();
+            $table->string('description')->default('')->change();
+            $table->string('language')->default('')->change();
+            $table->string('size')->default('')->change();
+            $table->string('stargazers_count')->default('')->change();
+            $table->string('watchers_count')->default('')->change();
+            $table->string('has_issues')->default('')->change();
+            $table->string('has_projects')->default('')->change();
+            $table->string('has_downloads')->default('')->change();
+            $table->string('has_wiki')->default('')->change();
+            $table->string('has_pages')->default('')->change();
+            $table->string('forks_count')->default('')->change();
+            $table->string('open_issues_count')->default('')->change();
+            $table->string('forks')->default('')->change();
+            $table->string('open_issues')->default('')->change();
+            $table->string('watchers')->default('')->change();
+            //$table->string('org_uuid')->default('')->change();
+            //$table->string('owner_uuid')->default('')->change();
+            $table->string('started_at')->default('')->change();
+            $table->string('last_push_at')->default('')->change();
+            $table->timestamps(); 
         });
     }
 

@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\DB;
 
 class getRepo extends Command
 {
@@ -37,6 +38,7 @@ class getRepo extends Command
      */
     public function handle()
     {
-        //
+        DB::table('repos')->delete();
+        echo "operation done";
     }
 }

@@ -22,6 +22,8 @@ class PostController extends Controller
         return view('posts.index')->with('posts', $posts);
     }
 
+   
+    
     /**
      * Show the form for creating a new resource.
      *
@@ -29,7 +31,7 @@ class PostController extends Controller
      */
     public function create()
     {
-        //
+        echo "hello create method";
     }
 
     /**

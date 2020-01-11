@@ -19,7 +19,7 @@ class everyMinute extends Command
      *
      * @var string
      */
-    protected $description = 'Delet posts every minute';
+    protected $description = 'Delete posts every minute';
 
     /**
      * Create a new command instance.

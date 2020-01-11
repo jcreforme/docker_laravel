@@ -20,9 +20,10 @@ Auth::routes();
 Route::get('/home', 'HomeController@index')->name('home');
 
 Route::get('/test', 'PagesController@test');
+Route::get('/test1', 'PagesController@test1');
 
-Route::get('/repostest', 'PagesController@repos');
+Route::get('/repos', 'PagesController@repos');
 
 Route::resource('posts', 'PostController');
 
-Route::resource('repos', 'ReposConstroller');
+Route::resource('repocontroller', 'ReposConstroller');
