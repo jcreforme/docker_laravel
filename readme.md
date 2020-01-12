@@ -67,6 +67,7 @@ PHPUnit 7.5.8 by Sebastian Bergmann and contributors.
 ### App commands
 How Get Repos from Github using cron Jobs {name} is the Repo's name (laravel, spatie, symfony...)
 ```
+$ php artisan get:Repos {name}
 $ php artisan get:Commits {name}
 ```
 
