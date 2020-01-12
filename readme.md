@@ -31,6 +31,7 @@ docker-compose up -d
 VERY VERY VERY VERYVERY VERYVERY VERYVERY VERYVERY VERYIMPORTANT!!!! 
 Load the DB schema!!!
 ```
+$ ./container
 $ php artisan migrate
 ```
 
