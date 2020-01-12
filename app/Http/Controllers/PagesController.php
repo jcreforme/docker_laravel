@@ -19,15 +19,6 @@ class PagesController extends Controller
     }
 
     public function repos() {
-        $posts = App\Repo::all();
-        $json= array();
-        foreach ($posts as $post) {
-            $json[]=array(
-                'id' => $post->id,
-                'body' => $post->body
-            );
-        }
-        return $json;
-        return view('pages.repos')->with('title', $json);
+        
     }
 }

@@ -12,7 +12,7 @@ class everyMinute extends Command
      *
      * @var string
      */
-    protected $signature = 'minute:update';
+    protected $signature = 'drop:repos';
 
     /**
      * The console command description.
@@ -39,7 +39,7 @@ class everyMinute extends Command
     public function handle()
     {
         //
-        DB::table('posts')->delete();
-        echo "operation done";
+        DB::table('repos')->delete();
+        echo "operation done Delete \n";
     }
 }

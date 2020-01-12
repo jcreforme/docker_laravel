@@ -34,8 +34,8 @@ class Repos extends Migration
             $table->string('forks')->nullable();
             $table->string('open_issues')->nullable();
             $table->string('watchers')->nullable();
-            //$table->string('org_uuid')->nullable();
-            //$table->string('owner_uuid')->nullable();
+            $table->string('org_uuid')->nullable();
+            $table->string('owner_uuid')->nullable();
             $table->string('started_at')->nullable();
             $table->string('last_push_at')->nullable();
         });

@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App;
+use App\Repo;
 use DB;
 use Illuminate\Http\Request;
 use GuzzleHttp\Client;
@@ -15,7 +15,7 @@ class ReposConstroller extends Controller
     {
         $this->client = new Client([
             // Base URI is used with relative requests
-            'base_uri' => 'https://api.github.com/users/laravel/',
+            'base_uri' => 'https://api.github.com/users/',
             
         ]);
 
@@ -27,49 +27,63 @@ class ReposConstroller extends Controller
      */
     public function index()
     {
+        $query_owner_uuid = isset($_GET['owner_uuid']) ? $_GET['owner_uuid'] : NULL;      
+        $query_name       = isset($_GET['name'])       ? $_GET['name'] : NULL;    
+        $query_started_at = isset($_GET['started_at']) ? $_GET['ownerstarted_at_uuid'] : NULL;
         
-        $res = $this->client->request('GET','repos');
-        //echo gettype($res->getBody()->getContents());
-        $res = json_decode( $res->getBody() );
+        if ( !is_null( $query_owner_uuid ) || !is_null( $query_name ) ) {
+
+            if ( !is_null( $query_owner_uuid ) && !is_null( $query_name ) ) {
+                $repos = Repo::where([
+                    'name' => $query_name,
+                    'owner_uuid' => $query_owner_uuid
+                ])->get();
+            } 
+            elseif ( !is_null( $query_owner_uuid ) && is_null( $query_name ) ) {
+                $repos = Repo::where('owner_uuid', $query_owner_uuid)->get();
+            }
+            
+            elseif ( is_null( $query_owner_uuid ) && !is_null( $query_name ) ) {
+                $repos = Repo::where('name', $query_name)->get();
+            } 
+            
+        }
+        else {
+            $repos = Repo::all();
+        }
+
         
-        $data = [];
-        foreach ($res as $repo) {
-            //print_r($repo->description) ;
-            /* Contact::create(array(
-              'name' => $person->first_name,
-            )); */
-            $data = [
-            "id" => $repo->id,
-            "node_id" => $repo->node_id,
-            "name" => $repo->name,
-            "full_name" => $repo->full_name,
-            'description' => $repo->description,
-            'language'=> $repo->language,
-            'size'=> $repo->size,
-            'stargazers_count'=> $repo->stargazers_count,
-            'watchers_count'=> $repo->watchers_count,
-            'has_issues'=> $repo->has_issues,
-            'has_projects'=> $repo->has_projects,
-            'has_downloads'=> $repo->has_downloads,
-            'has_wiki'=> $repo->has_wiki,
-            'has_pages'=> $repo->has_pages,
-            'forks_count'=> $repo->forks_count,
-            'open_issues_count' => $repo->open_issues_count,
-            'forks'=> $repo->forks,
-            'open_issues'=> $repo->open_issues,
-            'watchers'=> $repo->watchers,
-            //'org_uuid'=> "",
-            //'owner_uuid'=> "",
-            'started_at'=> "",
-            'last_push_at'=> "",
-            ];
-            /* print_r($data);
-            echo "<br>"; */
-            DB::table('repos')->insert($data);
-          }
-         //return json_decode( $res->getBody());
-       
-        //
+        $json = array();
+         foreach ($repos as $repo) {
+            
+            $json[] = array( 
+                'repo_uuid' => $repo->node_id,
+                'name' => $repo->name,
+                'full_name' => $repo->full_name,
+                'description' => $repo->description,
+                'language' => $repo->name,
+                    'stats_data' => array(
+                        'size' => $repo->size,
+                        'stargazers_count' => $repo->stargazers_count,
+                        'watchers_count' => $repo->watchers_count,
+                        'has_issues' => $repo->has_issues,
+                        'has_downloads' => $repo->has_downloads,
+                        'has_wiki' => $repo->has_wiki,
+                        'has_pages' => $repo->has_pages,
+                        'forks_count' => $repo->forks_count,
+                        'open_issues_count' => $repo->open_issues_count,
+                        'forks' => $repo->forks,
+                        'open_issues' => $repo->open_issues,
+                        'watchers' => $repo->watchers,
+                    ),
+                'org_uuid' => $repo->org_uuid,
+                'owner_uuid' => $repo->owner_uuid,
+                'started_at' => $repo->started_at,
+                'has_projects' => $repo->has_projects,
+            );
+        }
+        return $json; 
+        //return view('pages.repos')->with('title', $json);
     }
 
      /**
@@ -80,7 +94,7 @@ class ReposConstroller extends Controller
      */
     public function show($id)
     {
-       
+        
     }
 
 
