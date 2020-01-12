@@ -40,7 +40,7 @@ class ReposConstroller extends Controller
             )); */
             $data = [
             "id" => $repo->id,
-            //"repo_uuid" => "",
+            "node_id" => $repo->node_id,
             "name" => $repo->name,
             "full_name" => $repo->full_name,
             'description' => $repo->description,

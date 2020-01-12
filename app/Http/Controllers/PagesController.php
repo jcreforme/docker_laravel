@@ -19,7 +19,7 @@ class PagesController extends Controller
     }
 
     public function repos() {
-        $posts = App\Post::all();
+        $posts = App\Repo::all();
         $json= array();
         foreach ($posts as $post) {
             $json[]=array(
