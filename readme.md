@@ -28,6 +28,12 @@ Build the images and start the services:
 docker-compose build
 docker-compose up -d
 ```
+
+### composer
+```
+$ composer install
+```
+
 VERY VERY VERY VERYVERY VERYVERY VERYVERY VERYVERY VERYIMPORTANT!!!! 
 Load the DB schema!!!
 ```
@@ -35,10 +41,7 @@ $ ./container
 $ php artisan migrate
 ```
 
-### composer
-```
-$ composer install
-```
+
 
 ### container
 Running `./container` takes you inside the `laravel-app` container
