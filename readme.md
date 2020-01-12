@@ -11,7 +11,7 @@ Clone the repo:
 ```
 $ git clone https://github.com/jcreforme/docker_laravel.git
 
-$ cd laravel_laravel
+$ cd docker_laravel
 ```
 Copy `.env.example` to `.env`
 ```
