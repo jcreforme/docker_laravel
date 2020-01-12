@@ -56,15 +56,6 @@ $ ./db
 mysql>
 ```
 
-
-### php-artisan
-Run `php artisan` commands, example:
-```
-$ ./php-artisan make:controller BlogPostController --resource
-php artisan make:controller BlogPostController --resource
-Controller created successfully.
-```
-
 ### phpunit
 Run `./vendor/bin/phpunit` to execute tests, example:
 ```
