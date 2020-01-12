@@ -1,9 +1,10 @@
 # Docker Laravel App example
 
 ## Description
-Start developing a fresh Laravel application with `docker` using `docker-compose`.
+Connecting to GitHub API, get Repos and commits from a Repo using Laravel's Scheduler.
+THe Result will be show up as a Json Format. enjoy!
 
-The images used in this repo is `php:7.2-apache` and `mysql:5.7`. The goal is to make setting up the development as simple as possible.
+The images used in this repo is `php:7.2-apache` and `mysql:5.7`.
 
 ## Up and running
 Clone the repo:
