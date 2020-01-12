@@ -69,7 +69,7 @@ PHPUnit 7.5.8 by Sebastian Bergmann and contributors.
 How Get Repos from Github using cron Jobs {name} is the Repo's name (laravel, spatie, symfony...)
 ```
 $ php artisan get:Repos {name}
-$ php artisan get:Commits {name}
+$ php artisan get:Commits {repo} {owner}
 ```
 
 How clean Repos and Commmits tables form the DB
@@ -79,7 +79,8 @@ $ php artisan drop:cleanUp
 
 ### Github Repo's page result
 ```
-http://localhost:8000/repos
+http://localhost:8000/repos?name=laravel&owner_uuid=958072
+http://localhost:8000/commits?name=laravel
 ```
 
 HIRE ME!!!! :)

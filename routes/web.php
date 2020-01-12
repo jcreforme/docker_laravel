@@ -27,3 +27,5 @@ Route::get('/reposs', 'PagesController@repos');
 Route::resource('posts', 'PostController');
 
 Route::resource('repos', 'ReposConstroller');
+
+Route::resource('commits', 'CommitsConstroller');

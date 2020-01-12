@@ -15,6 +15,9 @@ class CreateCommitsTable extends Migration
     {
         Schema::create('commits', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->string('repo');
+            $table->integer('total');
+            $table->integer('author_id');
             $table->timestamps();
         });
     }
