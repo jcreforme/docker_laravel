@@ -12,16 +12,17 @@ $ git clone https://github.com/jcreforme/docker_laravel.git
 
 $ cd laravel_laravel
 ```
-
-Cleaning the database before start
-```
-$ rm -R run/*
-```
-
 Copy `.env.example` to `.env`
 ```
 $ cp .env.example .env 
 ```
+
+Cleaning the database before start
+```
+$ ./container
+$ rm -R run/*
+```
+
 
 Build the images and start the services:
 ```
@@ -35,20 +36,8 @@ $ php artisan migrate
 ```
 
 ### composer
+```
 $ composer install
-```
-Run `composer` command, example:
-```
-$ ./composer dump-autoload
-Generating optimized autoload files> Illuminate\Foundation\ComposerScripts::postAutoloadDump
-> @php artisan package:discover --ansi
-Discovered Package: beyondcode/laravel-dump-server
-Discovered Package: fideloper/proxy
-Discovered Package: laravel/tinker
-Discovered Package: nesbot/carbon
-Discovered Package: nunomaduro/collision
-Package manifest generated successfully.
-Generated optimized autoload files containing 3527 classes
 ```
 
 ### container
