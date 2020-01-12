@@ -19,7 +19,6 @@ $ cp .env.example .env
 
 Cleaning the database before start
 ```
-$ ./container
 $ rm -R run/*
 ```
 
