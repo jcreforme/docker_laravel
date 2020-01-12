@@ -402,6 +402,7 @@ class ComposerStaticIniteedd75cc4b492239e4e38be804c47c21
     );
 
     public static $classMap = array (
+        'App\\Commit' => __DIR__ . '/../..' . '/app/Commit.php',
         'App\\Console\\Commands\\everyMinute' => __DIR__ . '/../..' . '/app/Console/Commands/everyMinute.php',
         'App\\Console\\Commands\\getRepo' => __DIR__ . '/../..' . '/app/Console/Commands/getRepo.php',
         'App\\Console\\Kernel' => __DIR__ . '/../..' . '/app/Console/Kernel.php',
@@ -412,6 +413,7 @@ class ComposerStaticIniteedd75cc4b492239e4e38be804c47c21
         'App\\Http\\Controllers\\Auth\\ResetPasswordController' => __DIR__ . '/../..' . '/app/Http/Controllers/Auth/ResetPasswordController.php',
         'App\\Http\\Controllers\\Auth\\VerificationController' => __DIR__ . '/../..' . '/app/Http/Controllers/Auth/VerificationController.php',
         'App\\Http\\Controllers\\BlogPostController' => __DIR__ . '/../..' . '/app/Http/Controllers/BlogPostController.php',
+        'App\\Http\\Controllers\\CommitsConstroller' => __DIR__ . '/../..' . '/app/Http/Controllers/CommitsConstroller.php',
         'App\\Http\\Controllers\\Controller' => __DIR__ . '/../..' . '/app/Http/Controllers/Controller.php',
         'App\\Http\\Controllers\\HomeController' => __DIR__ . '/../..' . '/app/Http/Controllers/HomeController.php',
         'App\\Http\\Controllers\\PagesController' => __DIR__ . '/../..' . '/app/Http/Controllers/PagesController.php',

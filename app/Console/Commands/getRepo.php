@@ -14,7 +14,7 @@ class getRepo extends Command
      *
      * @var string
      */
-    protected $signature = 'get:Repos';
+    protected $signature = 'get:Repos {name}';
 
     protected $client;
 
@@ -47,46 +47,56 @@ class getRepo extends Command
      */
     public function handle()
     {
-        $res = $this->client->request('GET','laravel/repos');
+        $name = $this->argument('name');
+
+        $res = $this->client->request('GET', $name.'/repos');
         //echo gettype($res->getBody()->getContents());
         $res = json_decode( $res->getBody() );
         
-        $data = [];
-        foreach ($res as $repo) {
-            
-            if ($repo->owner) {
-                $owner = $repo->owner->{'id'};
-                $org_uuid = $repo->owner->{'node_id'};
+        if ($res) 
+        {
+            $data = [];
+            foreach ($res as $repo) {
+                
+                if ($repo->owner) {
+                    $owner = $repo->owner->{'id'};
+                    $org_uuid = $repo->owner->{'node_id'};
+                }
+                $data = [
+                "id" => $repo->id,
+                "node_id" => $repo->node_id,
+                "name" => $repo->name,
+                "full_name" => $repo->full_name,
+                'description' => $repo->description,
+                'language'=> $repo->language,
+                'size'=> $repo->size,
+                'stargazers_count'=> $repo->stargazers_count,
+                'watchers_count'=> $repo->watchers_count,
+                'has_issues'=> $repo->has_issues,
+                'has_projects'=> $repo->has_projects,
+                'has_downloads'=> $repo->has_downloads,
+                'has_wiki'=> $repo->has_wiki,
+                'has_pages'=> $repo->has_pages,
+                'forks_count'=> $repo->forks_count,
+                'open_issues_count' => $repo->open_issues_count,
+                'forks'=> $repo->forks,
+                'open_issues'=> $repo->open_issues,
+                'watchers'=> $repo->watchers,
+                'org_uuid'=> $org_uuid,
+                'owner_uuid'=> $owner,
+                'started_at'=> $repo->created_at,
+                'last_push_at'=> $repo->pushed_at,
+                'commits_url'=>$repo->commits_url
+                ];
+                /* print_r($data);
+                echo "<br>";  */
+                DB::table('repos')->insert($data);
+                
             }
-            $data = [
-            "id" => $repo->id,
-            "node_id" => $repo->node_id,
-            "name" => $repo->name,
-            "full_name" => $repo->full_name,
-            'description' => $repo->description,
-            'language'=> $repo->language,
-            'size'=> $repo->size,
-            'stargazers_count'=> $repo->stargazers_count,
-            'watchers_count'=> $repo->watchers_count,
-            'has_issues'=> $repo->has_issues,
-            'has_projects'=> $repo->has_projects,
-            'has_downloads'=> $repo->has_downloads,
-            'has_wiki'=> $repo->has_wiki,
-            'has_pages'=> $repo->has_pages,
-            'forks_count'=> $repo->forks_count,
-            'open_issues_count' => $repo->open_issues_count,
-            'forks'=> $repo->forks,
-            'open_issues'=> $repo->open_issues,
-            'watchers'=> $repo->watchers,
-            'org_uuid'=> $org_uuid,
-            'owner_uuid'=> $owner,
-            'started_at'=> $repo->created_at,
-            'last_push_at'=> $repo->pushed_at,
-            ];
-            /* print_r($data);
-            echo "<br>";  */
-            DB::table('repos')->insert($data);
-          }
-          echo "operation done Insert \n";
+            echo "operation done Insert \n";
+        } else {
+            echo "Somethign goes wrong \n";
+        }
+          
     }
 }

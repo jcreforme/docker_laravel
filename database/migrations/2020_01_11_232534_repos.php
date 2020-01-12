@@ -38,6 +38,8 @@ class Repos extends Migration
             $table->string('owner_uuid')->nullable();
             $table->string('started_at')->nullable();
             $table->string('last_push_at')->nullable();
+            $table->string('commits_url')->nullable();
+            
         });
     }
 
