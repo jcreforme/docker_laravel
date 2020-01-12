@@ -13,6 +13,11 @@ $ git clone https://github.com/jcreforme/docker_laravel.git
 $ cd laravel_laravel
 ```
 
+Cleaning the database before start
+```
+$ rm -R run/*
+```
+
 Copy `.env.example` to `.env`
 ```
 $ cp .env.example .env 
@@ -24,12 +29,14 @@ docker-compose build
 docker-compose up -d
 ```
 VERY VERY VERY VERYVERY VERYVERY VERYVERY VERYVERY VERYIMPORTANT!!!! 
-clean up the database before starts!!!
-$ php artisan migrate:fresh
-
+Load the DB schema!!!
+```
+$ php artisan migrate
+```
 
 ### composer
 $ composer install
+```
 Run `composer` command, example:
 ```
 $ ./composer dump-autoload
@@ -76,9 +83,17 @@ PHPUnit 7.5.8 by Sebastian Bergmann and contributors.
 
 ### App commands
 How Get Repos from Github using cron Jobs {name} is the Repo's name (laravel, spatie, symfony...)
+```
 $ php artisan get:Commits {name}
+```
 
 How clean Repos and Commmits tables form the DB
+```
 $ php artisan drop:cleanUp
+```
 
+### Github Repo's page result
+```
+http://localhost:8000/repos
+```
 
