@@ -20,7 +20,7 @@ $ cp .env.example .env
 
 Cleaning the database before start
 ```
-$ rm -R run/*
+$ sudo rm -R run/*
 ```
 
 
