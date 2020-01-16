@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateCommitsTable extends Migration
+class CreateContributesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,12 @@ class CreateCommitsTable extends Migration
      */
     public function up()
     {
-        Schema::create('commits', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->string('sha');
-            $table->string('repo');
-            //$table->string('stats');
+        Schema::create('contributes', function (Blueprint $table) {
+            $table->bigIncrements('id_primary');
+            $table->string('login');
             $table->string('owner');
+            $table->string('total');
+            $table->string('repo');
             $table->timestamps();
         });
     }
@@ -30,6 +30,6 @@ class CreateCommitsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('commits');
+        Schema::dropIfExists('contributes');
     }
 }

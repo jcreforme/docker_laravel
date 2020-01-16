@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 use GuzzleHttp\Client;
+use App\Repo;
 
 class getCommits extends Command
 {
@@ -13,7 +14,7 @@ class getCommits extends Command
      *
      * @var string
      */
-    protected $signature = 'get:Commits {repo} {owner}';
+    protected $signature = 'get:Commits {owner}';
 
     /**
      * The console command description.
@@ -40,49 +41,45 @@ class getCommits extends Command
      */
     public function handle()
     {
+        //https://api.github.com/repos/spatie/7to5/commits
+
         $owner = $this->argument('owner');
-        $repo_name = $this->argument('repo');
 
-        /* $commits_url = DB::table('repos')->select('commits_url')->where('name', $name)->limit(1)->get();
-        //print_r(json_decode(json_encode($commits_url)));
+        $repos = Repo::where([
+            'login' => $owner,
+        ])->get();
 
+        foreach ($repos as $repo) {
+            echo $repo->name ."\n";
+            $repo_name = $repo->name;
+            $commits_url = "https://api.github.com/repos/$owner/$repo_name/";
 
-        $clean_url= str_replace("{/sha}","", $commits_url[0]->{'commits_url'}); */
-        
-        //GET /repos/:owner/:repo/stats/contributors
-
-        $clean_url = "https://api.github.com/repos/$owner/$repo_name/stats/contributors";
-        $this->client = new Client([
-            'base_uri' => $clean_url,
+            $this->client = new Client([
+                'base_uri' => $commits_url,
+            ]);
             
-        ]);
-
-        $client = $this->client->request('GET', '');
-        $res = json_decode( $client->getBody() );
-        //print_r($res); 
-
-        if ($res) 
-        {
+            $client = $this->client->request('GET', 'commits');
+            $res = json_decode( $client->getBody() );    
             $data = [];
+            $stats = [];
             foreach ($res as $repo) {
                 
                 if ($repo->author) {
                     $author = $repo->author->{'id'};
                 }
                 $data = [
+                "sha" => $repo->sha,    
                 "repo" => $repo_name,
-                "total" => $repo->total,
-                "author_id" => $author,
-                
+                'owner' => $owner,
                 ];
-                /* print_r($data);
-                echo "<br>";  */
+
+                
                 DB::table('commits')->insert($data);
                 
             }
-            echo "operation done Insert \n";
-        } else {
-            echo "Somethign goes wrong \n";
+            echo "operation done \n";
         }
+
+        
     }
 }

@@ -17,34 +17,7 @@ class CommitsConstroller extends Controller
      */
     public function index()
     {
-        $query_owner_uuid = isset($_GET['name']) ? $_GET['name'] : NULL;      
-        
-        if ( !is_null( $query_owner_uuid ) ) {
-           
-                $total_commits = Commit::where('repo', $query_owner_uuid)->sum('total');            
-        }
-        $top_contributor = Commit::select('author_id')->where('repo', $query_owner_uuid)->orderBy('total', 'desc')->limit(10)->get(); 
-
-        
-        $total_repos = Repo::where('owner_uuid', '958072')->count('id');     //hard coded fro laravel
-
-        //print_r($top_contributor);
-        $json = array();
-        $author_array = array();
-
-        $json[] = array( 
-                
-            'total_commits' => $total_commits,
-            'tota_repos' => $total_repos
-           
-        );
-
-        foreach ($top_contributor as $author) {
-            $author_array[] = array( 'top_10_contributors' => $top_contributor);
-            break;
-        }
-
-        return array_merge($json, $author_array); 
+        //
     }
 
     /**

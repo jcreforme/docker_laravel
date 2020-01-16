@@ -404,8 +404,10 @@ class ComposerStaticIniteedd75cc4b492239e4e38be804c47c21
     public static $classMap = array (
         'App\\Commit' => __DIR__ . '/../..' . '/app/Commit.php',
         'App\\Console\\Commands\\everyMinute' => __DIR__ . '/../..' . '/app/Console/Commands/everyMinute.php',
+        'App\\Console\\Commands\\getCommits' => __DIR__ . '/../..' . '/app/Console/Commands/getCommits.php',
         'App\\Console\\Commands\\getRepo' => __DIR__ . '/../..' . '/app/Console/Commands/getRepo.php',
         'App\\Console\\Kernel' => __DIR__ . '/../..' . '/app/Console/Kernel.php',
+        'App\\Contributes' => __DIR__ . '/../..' . '/app/Contributes.php',
         'App\\Exceptions\\Handler' => __DIR__ . '/../..' . '/app/Exceptions/Handler.php',
         'App\\Http\\Controllers\\Auth\\ForgotPasswordController' => __DIR__ . '/../..' . '/app/Http/Controllers/Auth/ForgotPasswordController.php',
         'App\\Http\\Controllers\\Auth\\LoginController' => __DIR__ . '/../..' . '/app/Http/Controllers/Auth/LoginController.php',

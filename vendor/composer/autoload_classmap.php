@@ -8,8 +8,10 @@ $baseDir = dirname($vendorDir);
 return array(
     'App\\Commit' => $baseDir . '/app/Commit.php',
     'App\\Console\\Commands\\everyMinute' => $baseDir . '/app/Console/Commands/everyMinute.php',
+    'App\\Console\\Commands\\getCommits' => $baseDir . '/app/Console/Commands/getCommits.php',
     'App\\Console\\Commands\\getRepo' => $baseDir . '/app/Console/Commands/getRepo.php',
     'App\\Console\\Kernel' => $baseDir . '/app/Console/Kernel.php',
+    'App\\Contributes' => $baseDir . '/app/Contributes.php',
     'App\\Exceptions\\Handler' => $baseDir . '/app/Exceptions/Handler.php',
     'App\\Http\\Controllers\\Auth\\ForgotPasswordController' => $baseDir . '/app/Http/Controllers/Auth/ForgotPasswordController.php',
     'App\\Http\\Controllers\\Auth\\LoginController' => $baseDir . '/app/Http/Controllers/Auth/LoginController.php',

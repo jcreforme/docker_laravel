@@ -61,6 +61,7 @@ class getRepo extends Command
                 if ($repo->owner) {
                     $owner = $repo->owner->{'id'};
                     $org_uuid = $repo->owner->{'node_id'};
+                    $login = $repo->owner->{'login'};
                 }
                 $data = [
                 "id" => $repo->id,
@@ -86,7 +87,8 @@ class getRepo extends Command
                 'owner_uuid'=> $owner,
                 'started_at'=> $repo->created_at,
                 'last_push_at'=> $repo->pushed_at,
-                'commits_url'=>$repo->commits_url
+                'commits_url'=>$repo->commits_url,
+                'login' => $login
                 ];
                 /* print_r($data);
                 echo "<br>";  */

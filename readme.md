@@ -84,3 +84,12 @@ http://localhost:8000/commits?name=laravel
 ```
 
 HIRE ME!!!! :)
+
+
+### Github API
+```
+https://api.github.com/users/spatie
+https://api.github.com/users/spatie/repos
+https://api.github.com/repos/spatie/7to5/commits
+https://api.github.com/repos/laravel/airlock/stats/contributors
+```

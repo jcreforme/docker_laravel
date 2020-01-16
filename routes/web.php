@@ -22,10 +22,12 @@ Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/test', 'PagesController@test');
 Route::get('/test1', 'PagesController@test1');
 
-Route::get('/reposs', 'PagesController@repos');
-
 Route::resource('posts', 'PostController');
 
 Route::resource('repos', 'ReposConstroller');
 
 Route::resource('commits', 'CommitsConstroller');
+
+Route::get('orgs/details/{id}', 'ReposConstroller@details');
+
+Route::get('stats', 'ReposConstroller@stats');

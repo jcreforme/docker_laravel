@@ -18,7 +18,4 @@ class PagesController extends Controller
         return view('pages.repos')->with('title', $title);
     }
 
-    public function repos() {
-        
-    }
 }
