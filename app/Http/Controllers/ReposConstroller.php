@@ -41,7 +41,7 @@ class ReposConstroller extends Controller
                         case "name":
                         case "started_at" :  
                             //echo "entro";
-                            $prepareQuery .=$key . ' LIKE "' . $data . '%" OR ';
+                            $prepareQuery .=$key . ' LIKE "' . $data . '%" AND ';
                         break;    
                         case "owner_uuid":
                             $prepareQuery .=$key . ' = "' . $data . '" AND ';
@@ -52,8 +52,8 @@ class ReposConstroller extends Controller
                 }
             }
             
-            $query = substr($prepareQuery, 0, -3); // removeing the last OR from the query
-            echo "Query: WHERE $query   \n";
+            $query = substr($prepareQuery, 0, -4); // removeing the last OR from the query
+            //echo "Query: WHERE $query   \n";
             if ($query)
             {
                 //echo "entro 1";
@@ -72,37 +72,42 @@ class ReposConstroller extends Controller
             $repos = Repo::all();
         } 
 
-        
-        $json = array();
-        foreach ($repos as $repo)
+        if ($repos) 
         {
-            $json[] = array( 
-                'repo_uuid' => $repo->node_id,
-                'name' => $repo->name,
-                'full_name' => $repo->full_name,
-                'description' => $repo->description,
-                'language' => $repo->name,
-                    'stats_data' => array(
-                        'size' => $repo->size,
-                        'stargazers_count' => $repo->stargazers_count,
-                        'watchers_count' => $repo->watchers_count,
-                        'has_issues' => $repo->has_issues,
-                        'has_downloads' => $repo->has_downloads,
-                        'has_wiki' => $repo->has_wiki,
-                        'has_pages' => $repo->has_pages,
-                        'forks_count' => $repo->forks_count,
-                        'open_issues_count' => $repo->open_issues_count,
-                        'forks' => $repo->forks,
-                        'open_issues' => $repo->open_issues,
-                        'watchers' => $repo->watchers,
-                    ),
-                'org_uuid' => $repo->org_uuid,
-                'owner_uuid' => $repo->owner_uuid,
-                'started_at' => $repo->started_at,
-                'has_projects' => $repo->has_projects,
-            );
+            $json = array();
+            foreach ($repos as $repo)
+            {
+                $json[] = array( 
+                    'repo_uuid' => $repo->node_id,
+                    'name' => $repo->name,
+                    'full_name' => $repo->full_name,
+                    'description' => $repo->description,
+                    'language' => $repo->name,
+                        'stats_data' => array(
+                            'size' => $repo->size,
+                            'stargazers_count' => $repo->stargazers_count,
+                            'watchers_count' => $repo->watchers_count,
+                            'has_issues' => $repo->has_issues,
+                            'has_downloads' => $repo->has_downloads,
+                            'has_wiki' => $repo->has_wiki,
+                            'has_pages' => $repo->has_pages,
+                            'forks_count' => $repo->forks_count,
+                            'open_issues_count' => $repo->open_issues_count,
+                            'forks' => $repo->forks,
+                            'open_issues' => $repo->open_issues,
+                            'watchers' => $repo->watchers,
+                        ),
+                    'org_uuid' => $repo->org_uuid,
+                    'owner_uuid' => $repo->owner_uuid,
+                    'started_at' => $repo->started_at,
+                    'has_projects' => $repo->has_projects,
+                );
+            }
+            return $this->prettyPrint($json); 
         }
-        return $this->prettyPrint($json); 
+        else{
+            return "No Repos";
+        }
     }
 
      /**
