@@ -24,7 +24,8 @@ $ docker-compose build
 $ docker-compose up -d
 ```
 
-### composer
+### composer 
+Get into the container and install the composer
 ```
 $ ./container
 $ composer install
