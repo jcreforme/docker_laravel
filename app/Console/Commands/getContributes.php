@@ -69,7 +69,8 @@ class getContributes extends Command
                     'total' => $contri->total,
                     'login' => $commiter,
                     'owner' => $owner,   
-                    'repo'  => $repo->name
+                    'repo'  => $repo->name,
+                    'user_uuid' => $contri->author->{'id'}
                     ];
                     
                     DB::table('contributes')->insert($data);

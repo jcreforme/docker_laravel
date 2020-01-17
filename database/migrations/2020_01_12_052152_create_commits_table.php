@@ -19,6 +19,7 @@ class CreateCommitsTable extends Migration
             $table->string('repo');
             //$table->string('stats');
             $table->string('owner');
+            $table->string('date');
             $table->timestamps();
         });
     }

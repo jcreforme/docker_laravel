@@ -153,11 +153,12 @@ class ReposConstroller extends Controller
             $repos = Repo::select('login')->where('owner_uuid', $query_owner_uuid)->get()->first();
 
             $owner = $repos->login;
-            $total_commits = Commit::select('owner')->where('owner', $owner)->count('repo'); 
+            $total_commits = DB::table('contributes')->selectRaw('owner, SUM(total) as total')->where('owner', $owner)->groupBy('owner')->limit(1)->get();
             $total_repos = Repo::select('owner_uuid')->where('owner_uuid', $query_owner_uuid)->count('id'); 
             $first_repo = DB::table('repos')->select('name')->where('login', $owner)->orderBy('started_at', 'ASC')->first();
             $last_repo = DB::table('repos')->select('name')->where('login', $owner)->orderBy('started_at', 'DESC')->first();
-
+            $top_10_contributors = DB::table('contributes')->select('user_uuid', 'total')->where('owner', $owner)->orderBy('total', 'DESC')->limit(10)->get();
+            
             //print_r($top_contributor);
             $json = array();
             $author_array = array();
@@ -165,19 +166,17 @@ class ReposConstroller extends Controller
             $json[] = array( 
                 'first_repo'    => $first_repo->name,
                 'last_repo'    => $last_repo->name,
-                'total_commits' => $total_commits,
-                'tota_repos' => $total_repos
-            
+                'total_repos' => $total_repos,
+                'total_commits' => $total_commits[0]->total,
             );
 
-            /* foreach ($top_contributor as $author) {
-                $author_array[] = array( 'top_10_contributors' => $top_contributor);
-                break;
+            foreach ($top_10_contributors as $author) {
+                $author_array['top_10_contributors'] = array( 
+                    'user_uuid' => $author->user_uuid
+                );
             }
 
-            return array_merge($json, $author_array);  */
-
-            return $json;
+            return array_merge($json, $author_array);  
         }
         
     }
@@ -196,22 +195,33 @@ class ReposConstroller extends Controller
     public function stats()
     {
         $get_owners = DB::table('repos')->select('login')->distinct()->get();
+        
         $json = array();
             
         foreach($get_owners as $owner) 
         {
-            $most_popular_repo = DB::table('contributes')->selectRaw('repo, SUM(total) as total')->where('owner', 'spatie')->groupBy('repo')->orderBy('total', 'DESC')->limit(1)->get();
+            $most_popular_repo = DB::table('contributes')->select('repo')->where('owner', $owner->login)->orderBy('total', 'DESC')->first();
+           //echo json_encode($most_popular_repo)  ;
 
-            $json[] = array( 
+            //echo $most_popular_repo->{repo};
+            //break;
+            //$febrary_commits = DB::table('repo')->selectRaw('owner, COUNT(total) as total')->whereBetween("str_to_date(date, '%Y-%m-%d')", array("2019-02-01", "2019-02-28"))->groupBy('owner')->limit(1)->get();
+            $december_commits = DB::table('repos')->select(DB::raw('count(*) as december_commits'))->where("started_at", "<=","2019-12-01")->where("started_at", ">=","2017-12-28")->limit(1)->get();
+            $november_commits = DB::table('repos')->select(DB::raw('count(*) as november_commits'))->where("started_at", "<=","2019-11-01")->where("started_at", ">=","2017-11-28")->limit(1)->get();
+
+        
+              $json[] = array( 
                 'org_stats' => array( 
                     'Organisation' => array(
                         'name' => $owner->login
                     ),    
                     'most_popular_repo' => array(
-                        'name' => $most_popular_repo[0]->repo
-                    )    
+                        'name' => $most_popular_repo
+                    ),
+                    "december_commits" => $december_commits[0]->{'december_commits'},
+                    "november_commits" => $november_commits[0]->{'november_commits'},
                 )
-            );
+            );   
         }
             
         return $json;

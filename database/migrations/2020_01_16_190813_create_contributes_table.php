@@ -19,6 +19,7 @@ class CreateContributesTable extends Migration
             $table->string('owner');
             $table->string('total');
             $table->string('repo');
+            $table->integer('user_uuid');
             $table->timestamps();
         });
     }

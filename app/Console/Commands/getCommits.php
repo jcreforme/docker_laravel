@@ -64,13 +64,14 @@ class getCommits extends Command
             $stats = [];
             foreach ($res as $repo) {
                 
-                if ($repo->author) {
-                    $author = $repo->author->{'id'};
+                if ($repo->commit) {
+                    $date = $repo->commit->author->{'date'};
                 }
                 $data = [
-                "sha" => $repo->sha,    
+                "sha"  => $repo->sha,    
                 "repo" => $repo_name,
                 'owner' => $owner,
+                'date' => $date
                 ];
 
                 
