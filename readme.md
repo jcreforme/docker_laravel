@@ -89,7 +89,7 @@ https://api.github.com/repos/spatie/7to5/commits
 https://api.github.com/repos/laravel/airlock/stats/contributors
 ```
 
-### Usefull example datas
+### Usefull example pages
 ```
 http://localhost:8000/repos
 http://localhost:8000/repos/1863329
