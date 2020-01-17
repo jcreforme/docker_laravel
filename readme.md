@@ -26,6 +26,7 @@ $ docker-compose up -d
 
 ### composer
 ```
+$ ./container
 $ composer install
 ```
 
