@@ -93,7 +93,7 @@ https://api.github.com/repos/laravel/airlock/stats/contributors
 ```
 http://localhost:8000/repos
 http://localhost:8000/repos/1863329
-http://localhost:8000/orgs/details/7535935
+http://localhost:8000/orgs/details/958072
 
 Spatie id = 7535935
 Laravel id = 958072
