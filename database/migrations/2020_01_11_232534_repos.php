@@ -40,6 +40,7 @@ class Repos extends Migration
             $table->string('last_push_at')->nullable();
             $table->string('commits_url')->nullable();
             $table->string('login')->nullable();
+            $table->timestamps();
         });
     }
 

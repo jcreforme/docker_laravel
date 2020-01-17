@@ -41,7 +41,13 @@ Load the DB schema!!!
 $ ./container
 $ php artisan migrate
 ```
-
+Import Seeds (since is too much data Github will ban for an hour before it finishs the importation)
+Only Laravel and Saptie commits imported as seeds
+Only Laravel and Spatie Repos imported as seeds
+Only Laravel contributors imported as seeds
+```
+php artisan db:seed
+```
 
 
 ### container
@@ -70,9 +76,10 @@ How Get Repos from Github using cron Jobs {name} is the Repo's name (laravel, sp
 ```
 $ php artisan get:Repos {name}
 $ php artisan get:Commits {repo} {owner}
+$ php artisan get:Contributes {owner}
 ```
 
-How clean Repos and Commmits tables form the DB
+How clean Repos, COntributes and Commmits tables form the DB
 ```
 $ php artisan drop:cleanUp
 ```
@@ -83,9 +90,6 @@ http://localhost:8000/repos?name=laravel&owner_uuid=958072
 http://localhost:8000/commits?name=laravel
 ```
 
-HIRE ME!!!! :)
-
-
 ### Github API
 ```
 https://api.github.com/users/spatie
@@ -93,3 +97,17 @@ https://api.github.com/users/spatie/repos
 https://api.github.com/repos/spatie/7to5/commits
 https://api.github.com/repos/laravel/airlock/stats/contributors
 ```
+
+### Usefull example datas
+http://localhost:8000/repos
+http://localhost:8000/repos/1863329
+http://localhost:8000/orgs/details/7535935
+
+spatie id = 7535935
+laravel id = 958072
+repo id = 1863329
+
+### 
+HIRE ME!!!! :)
+
+

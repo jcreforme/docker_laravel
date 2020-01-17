@@ -15,11 +15,11 @@ class CreateContributesTable extends Migration
     {
         Schema::create('contributes', function (Blueprint $table) {
             $table->bigIncrements('id_primary');
-            $table->string('login');
-            $table->string('owner');
-            $table->string('total');
-            $table->string('repo');
-            $table->integer('user_uuid');
+            $table->string('login')->nullable();
+            $table->string('owner')->nullable();
+            $table->string('total')->nullable();
+            $table->string('repo')->nullable();
+            $table->integer('user_uuid')->nullable();
             $table->timestamps();
         });
     }

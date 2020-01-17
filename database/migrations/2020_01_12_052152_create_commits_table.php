@@ -15,11 +15,11 @@ class CreateCommitsTable extends Migration
     {
         Schema::create('commits', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('sha');
-            $table->string('repo');
+            $table->string('sha')->nullable();
+            $table->string('repo')->nullable();
             //$table->string('stats');
-            $table->string('owner');
-            $table->string('date');
+            $table->string('owner')->nullable();
+            $table->string('date')->nullable();
             $table->timestamps();
         });
     }

@@ -181,33 +181,44 @@ class ReposConstroller extends Controller
             {
                 $owner = $repos->login;
                 $total_commits = DB::table('contributes')->selectRaw('owner, SUM(total) as total')->where('owner', $owner)->groupBy('owner')->limit(1)->get();
-                $total_repos = Repo::select('owner_uuid')->where('owner_uuid', $query_owner_uuid)->count('id'); 
-                $first_repo = DB::table('repos')->select('name')->where('login', $owner)->orderBy('started_at', 'ASC')->first();
-                $last_repo = DB::table('repos')->select('name')->where('login', $owner)->orderBy('started_at', 'DESC')->first();
-                $top_10_contributors = DB::table('contributes')->select('user_uuid', 'total')->where('owner', $owner)->orderBy('total', 'DESC')->limit(10)->get();
+                $total_commits = isset($total_commits[0]->total)? $total_commits[0]->total : "";
                 
-                //print_r($top_10_contributors);
+                $total_repos = Repo::select('owner_uuid')->where('owner_uuid', $query_owner_uuid)->count('id'); 
+                $total_repos = isset($total_repos)? $total_repos : "";
+
+                $first_repo = DB::table('repos')->select('name')->where('login', $owner)->orderBy('started_at', 'ASC')->first();
+                $first_repo = !is_null($first_repo->name)? $first_repo->name : "";
+                
+                $last_repo = DB::table('repos')->select('name')->where('login', $owner)->orderBy('started_at', 'DESC')->first();
+                $last_repo = !is_null($last_repo->name)? $last_repo->name : "";
+                
+                $top_10_contributors = DB::table('contributes')->select('user_uuid', 'total')->where('owner', $owner)->orderBy('total', 'DESC')->limit(10)->get();
+
+                //die(print_r($top_10_contributors));
                 $json = array();
                 $author_array = array();
 
                 $json = array( 
-                    'first_repo'    => $first_repo->name,
-                    'last_repo'    => $last_repo->name,
+                    'first_repo'    => $first_repo,
+                    'last_repo'    => $last_repo,
                     'total_repos' => $total_repos,
-                    'total_commits' => $total_commits[0]->total,
+                    'total_commits' => $total_commits,
                 );
 
+                
                 foreach ($top_10_contributors as $key => $author) {
                     $author_array['top_10_contributors'][$key] = array( 
                         'user_uuid' => $author->user_uuid
                     );
                 }
+                
+                $result =  array_merge($json, $author_array);  
             }
             else 
             {
                 return "No match";
             }
-            $result =  array_merge($json, $author_array);  
+            
             return $this->prettyPrint($result);
         }
         
@@ -227,8 +238,8 @@ class ReposConstroller extends Controller
     public function stats()
     {
         $get_owners = DB::table('repos')->select('login')->distinct()->get();
-        
-        $json = array();
+
+       $json = array();
             
         foreach($get_owners as $owner) 
         {
@@ -240,7 +251,8 @@ class ReposConstroller extends Controller
             //$febrary_commits = DB::table('repo')->selectRaw('owner, COUNT(total) as total')->whereBetween("str_to_date(date, '%Y-%m-%d')", array("2019-02-01", "2019-02-28"))->groupBy('owner')->limit(1)->get();
             $december_commits = DB::table('repos')->select(DB::raw('count(*) as december_commits'))->where('login', $owner->login)->where("started_at", "<=","2019-12-01")->where("started_at", ">=","2017-12-28")->limit(1)->get();
             $november_commits = DB::table('repos')->select(DB::raw('count(*) as november_commits'))->where('login', $owner->login)->where("started_at", "<=","2019-11-01")->where("started_at", ">=","2017-11-28")->limit(1)->get();
-
+            $last_30_days_commit_count = DB::table('repos')->select(DB::raw('count(*) as last_30_days_commit_count'))->where('login', $owner->login)->where("started_at", "<=","2020-01-31")->where("started_at", ">=","2020-01-01")->limit(1)->get();
+            $open_issues_count =  DB::table('repos')->selectRaw('SUM(open_issues_count) as open_issues_count')->where('login', $owner->login)->groupBy('login')->limit(1)->get();
         
               $json[] = array( 
                 'org_stats' => array( 
@@ -250,8 +262,10 @@ class ReposConstroller extends Controller
                     'most_popular_repo' => array(
                         'name' => $most_popular_repo
                     ),
-                    "december_commits" => $december_commits[0]->{'december_commits'},
-                    "november_commits" => $november_commits[0]->{'november_commits'},
+                    "december_commits 2019" => $december_commits[0]->{'december_commits'},
+                    "november_commits 2019" => $november_commits[0]->{'november_commits'},
+                    "open_issues_count" => $open_issues_count[0]->{'open_issues_count'},
+                    "last_30_days_commit_count" => $last_30_days_commit_count[0]->{'last_30_days_commit_count'},
                 )
             );   
         }
@@ -264,7 +278,8 @@ class ReposConstroller extends Controller
      *
     */
     protected function prettyPrint($array) {
-        $array = json_encode($array, JSON_PRETTY_PRINT);
+
+        $array = trim(json_encode($array, JSON_PRETTY_PRINT), '[]');
 	    echo '<pre>'.print_r($array, true).'</pre>';
     }
     
