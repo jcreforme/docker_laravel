@@ -47,20 +47,20 @@ php artisan db:seed
 ```
 
 
-### container
+### Container
 Running `./container` takes you inside the `laravel-app` container
 ```
 $ ./container
 devuser@8cf37a093502:/var/www/html$
 ```
-### db
+### DB
 Running `./db` connects to your database container's daemon using mysql client.
 ```
 $ ./db
 mysql>
 ```
 
-### phpunit
+### Phpunit
 Run `./vendor/bin/phpunit` to execute tests, example:
 ```
 $ ./phpunit --group=failing
@@ -81,13 +81,7 @@ How clean Repos, COntributes and Commmits tables form the DB
 $ php artisan drop:cleanUp
 ```
 
-### Github Repo's page result
-```
-http://localhost:8000/repos?name=laravel&owner_uuid=958072
-http://localhost:8000/commits?name=laravel
-```
-
-### Github API
+### Github API's
 ```
 https://api.github.com/users/spatie
 https://api.github.com/users/spatie/repos

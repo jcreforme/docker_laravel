@@ -61,8 +61,8 @@ class ReposConstroller extends Controller
             } 
             else
             {
-                //echo "incorrect format \n";
-                $repos = Repo::all();
+                return "incorrect format \n";
+                //$repos = Repo::all();
             }    
                
         }
