@@ -95,9 +95,9 @@ http://localhost:8000/repos
 http://localhost:8000/repos/1863329
 http://localhost:8000/orgs/details/7535935
 
-spatie id = 7535935
-laravel id = 958072
-repo id = 1863329
+Spatie id = 7535935
+Laravel id = 958072
+An Laravel repo id = 1863329
 ```
 
 ### END 
