@@ -36,10 +36,10 @@ Load the DB schema!!!
 ```
 $ php artisan migrate
 ```
-Import Seeds (since is too much data Github will ban for an hour before it finishs the importation)
-Only Laravel and Saptie commits imported as seeds \n
-Only Laravel and Spatie Repos imported as seeds
-Only Laravel contributors imported as seeds
+Import Seeds (since is too much data Github will ban for an hour before it finishs the importation) <br />
+Only Laravel and Saptie commits imported as seeds <br />
+Only Laravel and Spatie Repos imported as seeds <br />
+Only Laravel contributors imported as seeds <br />
 ```
 php artisan db:seed
 ```
