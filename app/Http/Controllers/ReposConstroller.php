@@ -12,14 +12,16 @@ use GuzzleHttp\Client;
 class ReposConstroller extends Controller
 {
     protected $client;
+    protected $timezone_utc;
 
     public function __construct()
     {
-        $this->client = new Client([
+        /* $this->client = new Client([
             // Base URI is used with relative requests
             'base_uri' => 'https://api.github.com/users/',
             
-        ]);
+        ]); */
+        $this->timezone_utc = new \DateTimeZone('UTC');
 
     }
     /**
@@ -32,35 +34,53 @@ class ReposConstroller extends Controller
      */
     public function index()
     {
-        $query_owner_uuid = isset($_GET['owner_uuid']) ? $_GET['owner_uuid'] : NULL;      
-        $query_name       = isset($_GET['name'])       ? $_GET['name'] : NULL;    
-        $query_started_at = isset($_GET['started_at']) ? $_GET['ownerstarted_at_uuid'] : NULL;
-        
-        if ( !is_null( $query_owner_uuid ) || !is_null( $query_name ) ) {
-
-            if ( !is_null( $query_owner_uuid ) && !is_null( $query_name ) ) {
-                $repos = Repo::where([
-                    'name' => $query_name,
-                    'owner_uuid' => $query_owner_uuid
-                ])->get();
-            } 
-            elseif ( !is_null( $query_owner_uuid ) && is_null( $query_name ) ) {
-                $repos = Repo::where('owner_uuid', $query_owner_uuid)->get();
+        if (isset($_GET) && !empty($_GET))
+        {
+            $prepareQuery = '';
+            foreach ($_GET as $key => $data)
+            {
+                if ($data)
+                {
+                    //echo "entro $data";
+                    switch ($key)  {   
+                        case "name":
+                        case "started_at" :  
+                            //echo "entro";
+                            $prepareQuery .=$key . ' LIKE "' . $data . '%" OR ';
+                        break;    
+                        case "owner_uuid":
+                            $prepareQuery .=$key . ' = "' . $data . '" AND ';
+                        default:
+                            $prepareQuery .= "";
+                        break;
+                    }
+                }
             }
             
-            elseif ( is_null( $query_owner_uuid ) && !is_null( $query_name ) ) {
-                $repos = Repo::where('login', $query_name)->get();
+            $query = substr($prepareQuery, 0, -3); // removeing the last OR from the query
+            echo "Query: WHERE $query   \n";
+            if ($query)
+            {
+                //echo "entro 1";
+                $repos = Repo::whereRaw($query)->get();
             } 
-            
+            else
+            {
+                //echo "incorrect format \n";
+                $repos = Repo::all();
+            }    
+               
         }
-        else {
+        else
+        {
+            //echo "entro 2";
             $repos = Repo::all();
-        }
+        } 
 
         
         $json = array();
-         foreach ($repos as $repo) {
-            
+        foreach ($repos as $repo)
+        {
             $json[] = array( 
                 'repo_uuid' => $repo->node_id,
                 'name' => $repo->name,
@@ -101,41 +121,52 @@ class ReposConstroller extends Controller
      */
     public function show($id)
     {
-        //echo "entro show $id";
-        $repo = Repo::where([
-            'id' => $id,
-        ])->first();
+        //die("entro show $id");
+        $repo = Repo::where('id',$id)->get()->first();
 
-        $json = array();
-            
+        if ($repo) 
+        {
+            $json = array();
+
+            $started_at = $repo->started_at;
+            $last_push_at = $repo->last_push_at;
+            $started_at = new \DateTime($started_at, $this->timezone_utc);
+            $last_push_at = new \DateTime($last_push_at, $this->timezone_utc);
+
             $json[] = array( 
                 'repo_uuid' => $repo->node_id,
                 'name' => $repo->name,
                 'full_name' => $repo->full_name,
                 'description' => $repo->description,
                 'language' => $repo->name,
-                    'stats_data' => array(
-                        'size' => $repo->size,
-                        'stargazers_count' => $repo->stargazers_count,
-                        'watchers_count' => $repo->watchers_count,
-                        'has_issues' => $repo->has_issues,
-                        'has_projects' => $repo->has_projects,
-                        'has_downloads' => $repo->has_downloads,
-                        'has_wiki' => $repo->has_wiki,
-                        'has_pages' => $repo->has_pages,
-                        'forks_count' => $repo->forks_count,
-                        'open_issues_count' => $repo->open_issues_count,
-                        'forks' => $repo->forks,
-                        'open_issues' => $repo->open_issues,
-                        'watchers' => $repo->watchers,
-                    ),
+                'stats_data' => array(
+                    'size' => $repo->size,
+                    'stargazers_count' => $repo->stargazers_count,
+                    'watchers_count' => $repo->watchers_count,
+                    'has_issues' => $repo->has_issues,
+                    'has_projects' => $repo->has_projects,
+                    'has_downloads' => $repo->has_downloads,
+                    'has_wiki' => $repo->has_wiki,
+                    'has_pages' => $repo->has_pages,
+                    'forks_count' => $repo->forks_count,
+                    'open_issues_count' => $repo->open_issues_count,
+                    'forks' => $repo->forks,
+                    'open_issues' => $repo->open_issues,
+                    'watchers' => $repo->watchers,
+                ),
                 'org_uuid' => $repo->org_uuid,
                 'owner_uuid' => $repo->owner_uuid,
-                'started_at' => $repo->started_at
-                
+                'started_at' => $started_at->format('Y m d, G:i:s T'),
+                'last_push_at' => $last_push_at->format('Y m d, G:i:s T')
+                    
             );
-        
-        return $json; 
+            
+            return $json;
+        } 
+        else
+        {
+            echo "No Match with $id";
+        }
     }
 
     /**
