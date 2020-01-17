@@ -105,7 +105,8 @@ class ReposConstroller extends Controller
             }
             return $this->prettyPrint($json); 
         }
-        else{
+        else
+        {
             return "No Repos";
         }
     }
