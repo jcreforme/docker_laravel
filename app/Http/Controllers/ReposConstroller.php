@@ -16,11 +16,6 @@ class ReposConstroller extends Controller
 
     public function __construct()
     {
-        /* $this->client = new Client([
-            // Base URI is used with relative requests
-            'base_uri' => 'https://api.github.com/users/',
-            
-        ]); */
         $this->timezone_utc = new \DateTimeZone('UTC');
 
     }
@@ -107,8 +102,7 @@ class ReposConstroller extends Controller
                 'has_projects' => $repo->has_projects,
             );
         }
-        return $json; 
-        //return view('pages.repos')->with('title', $json);
+        return $this->prettyPrint($json); 
     }
 
      /**
@@ -133,7 +127,7 @@ class ReposConstroller extends Controller
             $started_at = new \DateTime($started_at, $this->timezone_utc);
             $last_push_at = new \DateTime($last_push_at, $this->timezone_utc);
 
-            $json[] = array( 
+            $json = array( 
                 'repo_uuid' => $repo->node_id,
                 'name' => $repo->name,
                 'full_name' => $repo->full_name,
@@ -161,11 +155,11 @@ class ReposConstroller extends Controller
                     
             );
             
-            return $json;
+            return $this->prettyPrint($json);
         } 
         else
         {
-            echo "No Match with $id";
+            return "No Match with $id";
         }
     }
 
@@ -183,31 +177,38 @@ class ReposConstroller extends Controller
         if ( isset( $query_owner_uuid ) ) {
             $repos = Repo::select('login')->where('owner_uuid', $query_owner_uuid)->get()->first();
 
-            $owner = $repos->login;
-            $total_commits = DB::table('contributes')->selectRaw('owner, SUM(total) as total')->where('owner', $owner)->groupBy('owner')->limit(1)->get();
-            $total_repos = Repo::select('owner_uuid')->where('owner_uuid', $query_owner_uuid)->count('id'); 
-            $first_repo = DB::table('repos')->select('name')->where('login', $owner)->orderBy('started_at', 'ASC')->first();
-            $last_repo = DB::table('repos')->select('name')->where('login', $owner)->orderBy('started_at', 'DESC')->first();
-            $top_10_contributors = DB::table('contributes')->select('user_uuid', 'total')->where('owner', $owner)->orderBy('total', 'DESC')->limit(10)->get();
-            
-            //print_r($top_contributor);
-            $json = array();
-            $author_array = array();
+            if($repos)
+            {
+                $owner = $repos->login;
+                $total_commits = DB::table('contributes')->selectRaw('owner, SUM(total) as total')->where('owner', $owner)->groupBy('owner')->limit(1)->get();
+                $total_repos = Repo::select('owner_uuid')->where('owner_uuid', $query_owner_uuid)->count('id'); 
+                $first_repo = DB::table('repos')->select('name')->where('login', $owner)->orderBy('started_at', 'ASC')->first();
+                $last_repo = DB::table('repos')->select('name')->where('login', $owner)->orderBy('started_at', 'DESC')->first();
+                $top_10_contributors = DB::table('contributes')->select('user_uuid', 'total')->where('owner', $owner)->orderBy('total', 'DESC')->limit(10)->get();
+                
+                //print_r($top_10_contributors);
+                $json = array();
+                $author_array = array();
 
-            $json[] = array( 
-                'first_repo'    => $first_repo->name,
-                'last_repo'    => $last_repo->name,
-                'total_repos' => $total_repos,
-                'total_commits' => $total_commits[0]->total,
-            );
-
-            foreach ($top_10_contributors as $author) {
-                $author_array['top_10_contributors'] = array( 
-                    'user_uuid' => $author->user_uuid
+                $json = array( 
+                    'first_repo'    => $first_repo->name,
+                    'last_repo'    => $last_repo->name,
+                    'total_repos' => $total_repos,
+                    'total_commits' => $total_commits[0]->total,
                 );
-            }
 
-            return array_merge($json, $author_array);  
+                foreach ($top_10_contributors as $key => $author) {
+                    $author_array['top_10_contributors'][$key] = array( 
+                        'user_uuid' => $author->user_uuid
+                    );
+                }
+            }
+            else 
+            {
+                return "No match";
+            }
+            $result =  array_merge($json, $author_array);  
+            return $this->prettyPrint($result);
         }
         
     }
@@ -237,8 +238,8 @@ class ReposConstroller extends Controller
             //echo $most_popular_repo->{repo};
             //break;
             //$febrary_commits = DB::table('repo')->selectRaw('owner, COUNT(total) as total')->whereBetween("str_to_date(date, '%Y-%m-%d')", array("2019-02-01", "2019-02-28"))->groupBy('owner')->limit(1)->get();
-            $december_commits = DB::table('repos')->select(DB::raw('count(*) as december_commits'))->where("started_at", "<=","2019-12-01")->where("started_at", ">=","2017-12-28")->limit(1)->get();
-            $november_commits = DB::table('repos')->select(DB::raw('count(*) as november_commits'))->where("started_at", "<=","2019-11-01")->where("started_at", ">=","2017-11-28")->limit(1)->get();
+            $december_commits = DB::table('repos')->select(DB::raw('count(*) as december_commits'))->where('login', $owner->login)->where("started_at", "<=","2019-12-01")->where("started_at", ">=","2017-12-28")->limit(1)->get();
+            $november_commits = DB::table('repos')->select(DB::raw('count(*) as november_commits'))->where('login', $owner->login)->where("started_at", "<=","2019-11-01")->where("started_at", ">=","2017-11-28")->limit(1)->get();
 
         
               $json[] = array( 
@@ -254,11 +255,19 @@ class ReposConstroller extends Controller
                 )
             );   
         }
-            
-        return $json;
-
+        //echo gettype($json);    
+        
+        return $this->prettyPrint($json);
     }
-
+    /*
+     * Just putting a "pretty" format to the Array
+     *
+    */
+    protected function prettyPrint($array) {
+        $array = json_encode($array, JSON_PRETTY_PRINT);
+	    echo '<pre>'.print_r($array, true).'</pre>';
+    }
+    
     /**
      * Show the form for creating a new resource.
      *
