@@ -34,7 +34,6 @@ $ composer install
 VERY VERY VERY VERYVERY VERYVERY VERYVERY VERYVERY VERYIMPORTANT!!!! 
 Load the DB schema!!!
 ```
-$ ./container
 $ php artisan migrate
 ```
 Import Seeds (since is too much data Github will ban for an hour before it finishs the importation)
