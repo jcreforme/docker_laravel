@@ -18,12 +18,6 @@ Copy `.env.example` to `.env`
 $ cp .env.example .env 
 ```
 
-Cleaning the database before start
-```
-$ sudo rm -R run/*
-```
-
-
 Build the images and start the services:
 ```
 docker-compose build
