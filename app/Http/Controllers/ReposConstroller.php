@@ -189,14 +189,14 @@ class ReposConstroller extends Controller
                 $total_commits = DB::table('contributes')->selectRaw('owner, SUM(total) as total')->where('owner', $owner)->groupBy('owner')->limit(1)->get();
                 $total_commits = isset($total_commits[0]->total)? $total_commits[0]->total : "";
                 
-                $total_repos = Repo::select('owner_uuid')->where('owner_uuid', $query_owner_uuid)->count('id'); 
-                $total_repos = isset($total_repos)? $total_repos : "";
-
-                $first_repo = DB::table('repos')->select('name')->where('login', $owner)->orderBy('started_at', 'ASC')->first();
-                $first_repo = !is_null($first_repo->name)? $first_repo->name : "";
-                
-                $last_repo = DB::table('repos')->select('name')->where('login', $owner)->orderBy('started_at', 'DESC')->first();
-                $last_repo = !is_null($last_repo->name)? $last_repo->name : "";
+                # SELECT (SELECT name FROM repos WHERE login = 'spatie' ORDER BY started_at ASC LIMIT 1) as first, (SELECT name FROM repos WHERE login = 'spatie' ORDER BY started_at DESC LIMIT 1) as last  FROM repos LIMIT 1;
+                $first_last = DB::table("repos")
+                                ->select(
+                                DB::raw("(SELECT COUNT(id) FROM repos WHERE owner_uuid = '$query_owner_uuid') as total_repos"),
+                                DB::raw("(SELECT name FROM repos WHERE login = '$owner' ORDER BY started_at ASC LIMIT 1) as first"),
+                                DB::raw("(SELECT name FROM repos WHERE login = '$owner' ORDER BY started_at DESC LIMIT 1) as last"))
+                                ->limit(1)
+                                ->get();
                 
                 $top_10_contributors = DB::table('contributes')->select('user_uuid', 'total')->where('owner', $owner)->orderBy('total', 'DESC')->limit(10)->get();
 
@@ -205,9 +205,9 @@ class ReposConstroller extends Controller
                 $author_array = array();
 
                 $json = array( 
-                    'first_repo'    => $first_repo,
-                    'last_repo'    => $last_repo,
-                    'total_repos' => $total_repos,
+                    'first_repo'    => $first_last[0]->{'first'},
+                    'last_repo'    => $first_last[0]->{'last'},
+                    'total_repos' => $first_last[0]->{'total_repos'},
                     'total_commits' => $total_commits,
                 );
 
