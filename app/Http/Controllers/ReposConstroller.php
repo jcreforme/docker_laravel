@@ -186,36 +186,48 @@ class ReposConstroller extends Controller
             if($repos)
             {
                 $owner = $repos->login;
-                $total_commits = DB::table('contributes')->selectRaw('owner, SUM(total) as total')->where('owner', $owner)->groupBy('owner')->limit(1)->get();
-                $total_commits = isset($total_commits[0]->total)? $total_commits[0]->total : "";
+                
+                $contributes_table = DB::table("contributes")
+                                    ->select(
+                                        "user_uuid",
+                                        DB::raw("(SELECT SUM(total) as total FROM contributes WHERE owner = '$owner' GROUP BY owner  LIMIT 1) as total_commits")
+                                    )
+                                    ->where('owner', $owner)
+                                    ->orderBy('total', 'DESC')
+                                    ->limit(10)
+                                    ->get();  
+                
+                $total_commits = isset($contributes_table[0]->{'total_commits'})? $contributes_table[0]->{'total_commits'} : "";
                 
                 # SELECT (SELECT name FROM repos WHERE login = 'spatie' ORDER BY started_at ASC LIMIT 1) as first, (SELECT name FROM repos WHERE login = 'spatie' ORDER BY started_at DESC LIMIT 1) as last  FROM repos LIMIT 1;
-                $first_last = DB::table("repos")
+                $repos_table = DB::table("repos")
                                 ->select(
-                                DB::raw("(SELECT COUNT(id) FROM repos WHERE owner_uuid = '$query_owner_uuid') as total_repos"),
-                                DB::raw("(SELECT name FROM repos WHERE login = '$owner' ORDER BY started_at ASC LIMIT 1) as first"),
-                                DB::raw("(SELECT name FROM repos WHERE login = '$owner' ORDER BY started_at DESC LIMIT 1) as last"))
+                                    DB::raw("(SELECT COUNT(id) FROM repos WHERE owner_uuid = '$query_owner_uuid') as total_repos"),
+                                    DB::raw("(SELECT name FROM repos WHERE login = '$owner' ORDER BY started_at ASC LIMIT 1) as first"),
+                                    DB::raw("(SELECT name FROM repos WHERE login = '$owner' ORDER BY started_at DESC LIMIT 1) as last")
+                                )
                                 ->limit(1)
                                 ->get();
                 
-                $top_10_contributors = DB::table('contributes')->select('user_uuid', 'total')->where('owner', $owner)->orderBy('total', 'DESC')->limit(10)->get();
-
+                
                 //die(print_r($top_10_contributors));
                 $json = array();
                 $author_array = array();
 
                 $json = array( 
-                    'first_repo'    => $first_last[0]->{'first'},
-                    'last_repo'    => $first_last[0]->{'last'},
-                    'total_repos' => $first_last[0]->{'total_repos'},
+                    'first_repo'    => $repos_table[0]->{'first'},
+                    'last_repo'    => $repos_table[0]->{'last'},
+                    'total_repos' => $repos_table[0]->{'total_repos'},
                     'total_commits' => $total_commits,
                 );
 
                 
-                foreach ($top_10_contributors as $key => $author) {
-                    $author_array['top_10_contributors'][$key] = array( 
-                        'user_uuid' => $author->user_uuid
-                    );
+                foreach ($contributes_table as $key => $author) {
+                    if (isset($author->user_uuid)) {
+                        $author_array['top_10_contributors'][$key] = array( 
+                            'user_uuid' => $author->user_uuid
+                        );
+                    }
                 }
                 
                 $result =  array_merge($json, $author_array);  
@@ -250,11 +262,7 @@ class ReposConstroller extends Controller
         foreach($get_owners as $owner) 
         {
             $most_popular_repo = DB::table('contributes')->select('repo')->where('owner', $owner->login)->orderBy('total', 'DESC')->first();
-           //echo json_encode($most_popular_repo)  ;
 
-            //echo $most_popular_repo->{repo};
-            //break;
-            //$febrary_commits = DB::table('repo')->selectRaw('owner, COUNT(total) as total')->whereBetween("str_to_date(date, '%Y-%m-%d')", array("2019-02-01", "2019-02-28"))->groupBy('owner')->limit(1)->get();
             $december_commits = DB::table('repos')->select(DB::raw('count(*) as december_commits'))->where('login', $owner->login)->where("started_at", "<=","2019-12-01")->where("started_at", ">=","2017-12-28")->limit(1)->get();
             $november_commits = DB::table('repos')->select(DB::raw('count(*) as november_commits'))->where('login', $owner->login)->where("started_at", "<=","2019-11-01")->where("started_at", ">=","2017-11-28")->limit(1)->get();
             $last_30_days_commit_count = DB::table('repos')->select(DB::raw('count(*) as last_30_days_commit_count'))->where('login', $owner->login)->where("started_at", "<=","2020-01-31")->where("started_at", ">=","2020-01-01")->limit(1)->get();
