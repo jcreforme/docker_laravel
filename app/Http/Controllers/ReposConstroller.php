@@ -263,11 +263,16 @@ class ReposConstroller extends Controller
         {
             $most_popular_repo = DB::table('contributes')->select('repo')->where('owner', $owner->login)->orderBy('total', 'DESC')->first();
 
-            $december_commits = DB::table('repos')->select(DB::raw('count(*) as december_commits'))->where('login', $owner->login)->where("started_at", "<=","2019-12-01")->where("started_at", ">=","2017-12-28")->limit(1)->get();
-            $november_commits = DB::table('repos')->select(DB::raw('count(*) as november_commits'))->where('login', $owner->login)->where("started_at", "<=","2019-11-01")->where("started_at", ">=","2017-11-28")->limit(1)->get();
-            $last_30_days_commit_count = DB::table('repos')->select(DB::raw('count(*) as last_30_days_commit_count'))->where('login', $owner->login)->where("started_at", "<=","2020-01-31")->where("started_at", ">=","2020-01-01")->limit(1)->get();
-            $open_issues_count =  DB::table('repos')->selectRaw('SUM(open_issues_count) as open_issues_count')->where('login', $owner->login)->groupBy('login')->limit(1)->get();
-        
+            $repos_table = DB::table("repos")
+                                ->select(
+                                    DB::raw("(SELECT COUNT(id) FROM repos WHERE login = '$owner->login' AND started_at >= '2019-12-01' AND started_at <= '2019-12-31' ) as december_commits"),
+                                    DB::raw("(SELECT COUNT(id) FROM repos WHERE login = '$owner->login' AND started_at >= '2019-11-01' AND started_at <= '2019-11-30' ) as november_commits"),
+                                    DB::raw("(SELECT COUNT(id) FROM repos WHERE login = '$owner->login' AND started_at >= '2020-01-01' AND started_at <= '2020-01-31' ) as last_30_days_commit_count"),
+                                    DB::raw("(SELECT SUM(open_issues_count) FROM repos WHERE login = '$owner->login') as open_issues_count")
+                                )
+                                ->limit(1)
+                                ->get();
+                                
               $json[] = array( 
                 'org_stats' => array( 
                     'Organisation' => array(
@@ -276,10 +281,10 @@ class ReposConstroller extends Controller
                     'most_popular_repo' => array(
                         'name' => $most_popular_repo
                     ),
-                    "december_commits 2019" => $december_commits[0]->{'december_commits'},
-                    "november_commits 2019" => $november_commits[0]->{'november_commits'},
-                    "open_issues_count" => $open_issues_count[0]->{'open_issues_count'},
-                    "last_30_days_commit_count" => $last_30_days_commit_count[0]->{'last_30_days_commit_count'},
+                    "december_commits 2019" => $repos_table[0]->{'december_commits'},
+                    "november_commits 2019" => $repos_table[0]->{'november_commits'},
+                    "open_issues_count" => $repos_table[0]->{'open_issues_count'},
+                    "last_30_days_commit_count" => $repos_table[0]->{'last_30_days_commit_count'},
                 )
             );   
         }
