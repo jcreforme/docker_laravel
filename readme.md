@@ -46,7 +46,7 @@ php artisan db:seed
 ```
 
 ### App commands
-How Get Repos from Github using cron Jobs {name} is the Repo's name and {owner} is the repo's name (examples: laravel, spatie, symfony...)
+How Get Repos from Github using cron Jobs {name} is the Repo's name and {owner} is the user's name (examples: laravel, spatie, symfony...)
 ```
 $ php artisan get:Repos {name}
 $ php artisan get:Commits {repo} {owner}
