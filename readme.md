@@ -37,8 +37,8 @@ $ php artisan migrate
 ```
 
 ### Seeds
-Import Seeds (since is too much data Github will ban for an hour before it finishs the importation) <br />
-Only Laravel and Saptie commits imported as seeds <br />
+Import Seeds <br />
+Only Laravel and Spatie commits imported as seeds <br />
 Only Laravel and Spatie Repos imported as seeds <br />
 Only Laravel contributors imported as seeds <br />
 ```
@@ -46,7 +46,7 @@ php artisan db:seed
 ```
 
 ### App commands
-How Get Repos from Github using cron Jobs {name} is the Repo's name (laravel, spatie, symfony...)
+How Get Repos from Github using cron Jobs {name} is the Repo's name and {owner} is the repo's name (examples: laravel, spatie, symfony...)
 ```
 $ php artisan get:Repos {name}
 $ php artisan get:Commits {repo} {owner}
@@ -75,8 +75,6 @@ https://api.github.com/repos/laravel/airlock/stats/contributors
 http://localhost:8000/repos
 http://localhost:8000/repos/1863329
 http://localhost:8000/orgs/details/958072
-
-
 ```
 
 
