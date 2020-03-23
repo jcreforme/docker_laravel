@@ -80,7 +80,7 @@ Get specific repository with details
 ```
 http://localhost:8000/repos/1863329
 ```
-Get the Organization's details with the top 10 contributors and commits
+Get the Organization's details with the top 10 contributors, total repositories and total commits
 ```
 http://localhost:8000/orgs/details/958072
 ```
