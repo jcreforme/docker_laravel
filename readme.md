@@ -60,9 +60,9 @@ $ php artisan drop:cleanUp
 
 ### Github API's
 ```
-Spatie Repo ID = 7535935
-Laravel Repo ID = 958072
-Symfony Repo ID = 143937
+Spatie`s ID = 7535935
+Laravel`s ID = 958072
+Symfony`s ID = 143937
 
 https://api.github.com/users/spatie
 https://api.github.com/users/spatie/repos
