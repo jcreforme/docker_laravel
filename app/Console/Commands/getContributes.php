@@ -53,7 +53,15 @@ class getContributes extends Command
         foreach ($get_repos as $repo)
         {
 
-            $res = $this->client->request('GET', "$owner/$repo->name/stats/contributors");
+            
+            try {
+                $res = $this->client->request('GET', "$owner/$repo->name/stats/contributors");
+            } catch (RequestException $e) {
+                echo Psr7\str($e->getRequest());
+                if ($e->hasResponse()) {
+                    echo Psr7\str($e->getResponse());
+                }
+            }
             //echo gettype($res->getBody()->getContents());
             $res = json_decode( $res->getBody() );
             

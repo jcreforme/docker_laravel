@@ -30,8 +30,7 @@ Get into the container and install the composer
 $ ./container
 $ composer install
 ```
-
-VERY VERY VERY VERYVERY VERYVERY VERYVERY VERYVERY VERYIMPORTANT!!!! 
+VERY VERYIMPORTANT!!!! 
 Load the DB schema!!!
 ```
 $ php artisan migrate
@@ -44,28 +43,6 @@ Only Laravel and Spatie Repos imported as seeds <br />
 Only Laravel contributors imported as seeds <br />
 ```
 php artisan db:seed
-```
-
-
-### Container
-Running `./container` takes you inside the `laravel-app` container
-```
-$ ./container
-devuser@8cf37a093502:/var/www/html$
-```
-### DB
-Running `./db` connects to your database container's daemon using mysql client.
-```
-$ ./db
-mysql>
-```
-
-### Phpunit
-Run `./vendor/bin/phpunit` to execute tests, example:
-```
-$ ./phpunit --group=failing
-vendor/bin/phpunit --group=failing
-PHPUnit 7.5.8 by Sebastian Bergmann and contributors.
 ```
 
 ### App commands
@@ -83,6 +60,10 @@ $ php artisan drop:cleanUp
 
 ### Github API's
 ```
+Spatie Repo ID = 7535935
+Laravel Repo ID = 958072
+Symfony Repo ID = 143937
+
 https://api.github.com/users/spatie
 https://api.github.com/users/spatie/repos
 https://api.github.com/repos/spatie/7to5/commits
@@ -95,10 +76,27 @@ http://localhost:8000/repos
 http://localhost:8000/repos/1863329
 http://localhost:8000/orgs/details/958072
 
-Spatie id = 7535935
-Laravel id = 958072
-An Laravel repo id = 1863329
+
 ```
+
+
+### In case requires to check the DB
+Running `./db` connects to your database container's daemon using mysql client.
+the Query to get the Repos ids.
+```
+$ ./db
+mysql> select id, node_id from repos;
+```
+
+
+### In case requires Phpunit
+Run `./vendor/bin/phpunit` to execute tests, example:
+```
+$ ./phpunit --group=failing
+vendor/bin/phpunit --group=failing
+PHPUnit 7.5.8 by Sebastian Bergmann and contributors.
+```
+
 
 ### END 
 HIRE ME!!!! :)

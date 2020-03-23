@@ -58,7 +58,16 @@ class getCommits extends Command
                 'base_uri' => $commits_url,
             ]);
             
-            $client = $this->client->request('GET', 'commits');
+            
+            try {
+                $client = $this->client->request('GET', 'commits');
+            } catch (RequestException $e) {
+                echo Psr7\str($e->getRequest());
+                if ($e->hasResponse()) {
+                    echo Psr7\str($e->getResponse());
+                }
+            }
+            
             $res = json_decode( $client->getBody() );    
             $data = [];
             $stats = [];

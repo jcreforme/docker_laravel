@@ -49,8 +49,17 @@ class getRepo extends Command
     {
         $name = $this->argument('name');
 
-        $res = $this->client->request('GET', $name.'/repos');
+        
         //echo gettype($res->getBody()->getContents());
+        try {
+            $res = $this->client->request('GET', $name.'/repos');
+        } catch (RequestException $e) {
+            echo Psr7\str($e->getRequest());
+            if ($e->hasResponse()) {
+                echo Psr7\str($e->getResponse());
+            }
+        }
+
         $res = json_decode( $res->getBody() );
         
         if ($res) 
