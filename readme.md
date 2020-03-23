@@ -71,9 +71,17 @@ https://api.github.com/repos/laravel/airlock/stats/contributors
 ```
 
 ### Usefull example pages
+
+Get all the repositories
 ```
 http://localhost:8000/repos
+```
+Get specific repository with details
+```
 http://localhost:8000/repos/1863329
+```
+Get the Organization's details with the top contributors and commits
+```
 http://localhost:8000/orgs/details/958072
 ```
 
